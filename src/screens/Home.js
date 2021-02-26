@@ -1,8 +1,22 @@
 import React, { Component, useState } from 'react'
-import { View, Text, StyleSheet, Platform, StatusBar } from 'react-native'
+import {
+  View,
+  Text,
+  StyleSheet,
+  Platform,
+  StatusBar,
+  Alert
+} from 'react-native'
 import params from '../params'
 
-import { createMinedBoard } from '../functions'
+import {
+  createMinedBoard,
+  cloneBoard,
+  openField,
+  hadExplosion,
+  wonGame,
+  showMines
+} from '../functions'
 
 import MineField from '../components/MineField'
 import Flag from '../components/Flag'
@@ -15,16 +29,29 @@ export default () => {
     return Math.ceil(rows * cols * params.difficultLevel)
   }
 
-  const createState = () => {
-    const cols = params.getColumnsAmount()
-    const rows = params.getRowsAmount()
+  const cols = params.getColumnsAmount()
+  const rows = params.getRowsAmount()
 
-    return {
-      board: createMinedBoard(rows, cols, minesAmount())
+  const [state, setState] = useState({
+    board: createMinedBoard(rows, cols, minesAmount()),
+    won: false,
+    lost: false
+  })
+
+  onOpenField = (row, column) => {
+    const board = cloneBoard(state.board)
+    openField(board, row, column)
+    const lost = hadExplosion(board)
+    const won = wonGame(board)
+    if (lost) {
+      showMines(board)
+      Alert.alert('Perdeu!', 'Que buuuurrooo!')
     }
+    if (won) {
+      Alert.alert('Ganhou!', 'Parabéns!')
+    }
+    setState({ board, lost, won })
   }
-
-  const [state, setState] = useState(createState())
 
   return (
     <View style={styles.view}>
@@ -34,7 +61,7 @@ export default () => {
       </Text>
 
       <View styles={styles.board}>
-        <MineField board={state.board}></MineField>
+        <MineField board={state.board} onOpenField={onOpenField}></MineField>
       </View>
     </View>
   )
