@@ -12,8 +12,8 @@ export default ({ mined, opened, nearMines, exploded, flagged }) => {
   // CONSTRUIR DICIONARIO
   if (opened) styleField.push(styles.openField)
   if (exploded) styleField.push(styles.exploded)
-  if (flagged) styleField.push(styles.flagged, styles.fieldRegular)
-  if (styleField.length === 1) styleField.push(styles.fieldRegular)
+  if (flagged) styleField.push(styles.flagged)
+  if (!opened && !exploded) styleField.push(styles.fieldRegular)
 
   // CONSTRUIR DICIONARIO
   let color = null

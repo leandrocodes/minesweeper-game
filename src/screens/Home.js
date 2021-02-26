@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Platform, StatusBar } from 'react-native'
 import params from '../params'
 
 import Field from '../components/Field'
+import Flag from '../components/Flag'
 
 export default () => (
   <View style={styles.view}>
@@ -22,6 +23,7 @@ export default () => (
     <Field opened mined />
     <Field opened mined exploded />
     <Field flagged />
+    <Field flagged opened />
   </View>
 )
 
