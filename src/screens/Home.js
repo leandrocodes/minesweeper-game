@@ -21,6 +21,7 @@ export default () => (
     <Field mined />
     <Field opened mined />
     <Field opened mined exploded />
+    <Field flagged />
   </View>
 )
 
