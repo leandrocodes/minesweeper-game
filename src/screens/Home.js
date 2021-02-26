@@ -1,37 +1,54 @@
-import React from 'react'
+import React, { Component, useState } from 'react'
 import { View, Text, StyleSheet, Platform, StatusBar } from 'react-native'
 import params from '../params'
 
-import Field from '../components/Field'
+import { createMinedBoard } from '../functions'
+
+import MineField from '../components/MineField'
 import Flag from '../components/Flag'
 
-export default () => (
-  <View style={styles.view}>
-    <Text style={styles.welcome}>Starting mines!</Text>
-    <Text style={styles.instructions}>
-      Tamanho da grade: {params.getRowsAmount()}x{params.getColumnsAmount()}
-    </Text>
-    <Field />
-    <Field opened />
-    <Field opened nearMines={1} />
-    <Field opened nearMines={2} />
-    <Field opened nearMines={3} />
-    <Field opened nearMines={4} />
-    <Field opened nearMines={5} />
-    <Field opened nearMines={6} />
-    <Field mined />
-    <Field opened mined />
-    <Field opened mined exploded />
-    <Field flagged />
-    <Field flagged opened />
-  </View>
-)
+export default () => {
+  const minesAmount = () => {
+    const cols = params.getColumnsAmount()
+    const rows = params.getRowsAmount()
+
+    return Math.ceil(rows * cols * params.difficultLevel)
+  }
+
+  const createState = () => {
+    const cols = params.getColumnsAmount()
+    const rows = params.getRowsAmount()
+
+    return {
+      board: createMinedBoard(rows, cols, minesAmount())
+    }
+  }
+
+  const [state, setState] = useState(createState())
+
+  return (
+    <View style={styles.view}>
+      <Text style={styles.welcome}>Starting mines!</Text>
+      <Text style={styles.instructions}>
+        Tamanho da grade: {params.getRowsAmount()}x{params.getColumnsAmount()}
+      </Text>
+
+      <View styles={styles.board}>
+        <MineField board={state.board}></MineField>
+      </View>
+    </View>
+  )
+}
 
 const styles = StyleSheet.create({
   view: {
     paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
     flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center'
+  },
+  board: {
     alignItems: 'center',
-    justifyContent: 'center'
+    backgroundColor: '#aaa'
   }
 })
