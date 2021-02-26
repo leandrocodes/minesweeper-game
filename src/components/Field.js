@@ -9,7 +9,7 @@ export default ({ mined, opened, nearMines, exploded }) => {
   const styleField = [styles.field]
 
   if (opened) styleField.push(styles.openField)
-  if (exploded) styleField.push(style.exploded)
+  if (exploded) styleField.push(styles.exploded)
   if (styleField.length === 1) styleField.push(styles.fieldRegular)
 
   let color = null
@@ -55,5 +55,10 @@ const styles = StyleSheet.create({
   label: {
     fontWeight: 'bold',
     fontSize: params.fontSize
+  },
+
+  exploded: {
+    backgroundColor: 'red',
+    borderColor: 'red'
   }
 })
