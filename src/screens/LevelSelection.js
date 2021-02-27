@@ -11,7 +11,7 @@ export default props => {
     >
       <View style={styles.frame}>
         <View style={styles.container}>
-          <Text style={styles.title}>Selecione o Nível</Text>
+          <Text style={styles.title}>Select your level</Text>
           <TouchableOpacity
             style={[styles.button, styles.bgEasy]}
             onPress={() => props.onLevelSelected(0.1)}
@@ -55,7 +55,8 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 10,
-    padding: 5
+    padding: 10,
+    borderRadius: 5
   },
   buttonLabel: {
     fontSize: 20,
@@ -63,12 +64,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   bgEasy: {
-    backgroundColor: '#49b65d'
+    backgroundColor: '#219ebc'
   },
   bgNormal: {
-    backgroundColor: '#2765F7'
+    backgroundColor: '#ffba08'
   },
   bgHard: {
-    backgroundColor: '#F26337'
+    backgroundColor: '#d00000'
   }
 })
