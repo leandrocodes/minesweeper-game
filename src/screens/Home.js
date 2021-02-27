@@ -16,11 +16,12 @@ import {
   hadExplosion,
   wonGame,
   showMines,
-  invertFlag
+  invertFlag,
+  flagsUsed
 } from '../functions'
 
 import MineField from '../components/MineField'
-import Flag from '../components/Flag'
+import Header from '../components/Header'
 
 export default () => {
   const minesAmount = () => {
@@ -30,14 +31,17 @@ export default () => {
     return Math.ceil(rows * cols * params.difficultLevel)
   }
 
-  const cols = params.getColumnsAmount()
-  const rows = params.getRowsAmount()
+  const createState = () => {
+    const rows = params.getRowsAmount()
+    const cols = params.getColumnsAmount()
+    return {
+      board: createMinedBoard(rows, cols, minesAmount()),
+      won: false,
+      lost: false
+    }
+  }
 
-  const [state, setState] = useState({
-    board: createMinedBoard(rows, cols, minesAmount()),
-    won: false,
-    lost: false
-  })
+  const [state, setState] = useState(createState())
 
   const onOpenField = (row, column) => {
     const board = cloneBoard(state.board)
@@ -46,10 +50,10 @@ export default () => {
     const won = wonGame(board)
     if (lost) {
       showMines(board)
-      Alert.alert('Perdeu!', 'Que buuuurrooo!')
+      Alert.alert('You loose!', 'What a shame!')
     }
     if (won) {
-      Alert.alert('Ganhou!', 'Parabéns!')
+      Alert.alert('Win!', 'Congrats!')
     }
     setState({ board, lost, won })
   }
@@ -60,18 +64,17 @@ export default () => {
     const won = wonGame(board)
 
     if (won) {
-      Alert.alert('Ganhou!', 'Parabéns!')
+      Alert.alert('Win!', 'Congrats!')
     }
     setState({ board, won })
   }
 
   return (
     <View style={styles.view}>
-      <Text style={styles.welcome}>Starting mines!</Text>
-      <Text style={styles.instructions}>
-        Tamanho da grade: {params.getRowsAmount()}x{params.getColumnsAmount()}
-      </Text>
-
+      <Header
+        flagsLeft={minesAmount() - flagsUsed(state.board)}
+        onNewGame={() => setState(createState())}
+      />
       <View styles={styles.board}>
         <MineField
           board={state.board}
