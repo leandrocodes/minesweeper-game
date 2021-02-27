@@ -23,6 +23,8 @@ import {
 import MineField from '../components/MineField'
 import Header from '../components/Header'
 
+import LevelSelection from './LevelSelection'
+
 export default () => {
   const minesAmount = () => {
     const cols = params.getColumnsAmount()
@@ -37,7 +39,8 @@ export default () => {
     return {
       board: createMinedBoard(rows, cols, minesAmount()),
       won: false,
-      lost: false
+      lost: false,
+      showLevelSelection: false
     }
   }
 
@@ -55,7 +58,7 @@ export default () => {
     if (won) {
       Alert.alert('Win!', 'Congrats!')
     }
-    setState({ board, lost, won })
+    setState({ board, lost, won, showLevelSelection: false })
   }
 
   const onFlagField = (row, column) => {
@@ -66,14 +69,29 @@ export default () => {
     if (won) {
       Alert.alert('Win!', 'Congrats!')
     }
-    setState({ board, won })
+    setState({ board, won, showLevelSelection: false })
+  }
+
+  const onLevelSelected = level => {
+    params.difficultLevel = level
+    setState(createState())
   }
 
   return (
     <View style={styles.view}>
+      <LevelSelection
+        isVisible={state.showLevelSelection}
+        onLevelSelected={onLevelSelected}
+        onCancel={() =>
+          setState(prev => ({ ...prev, showLevelSelection: false }))
+        }
+      />
       <Header
         flagsLeft={minesAmount() - flagsUsed(state.board)}
         onNewGame={() => setState(createState())}
+        onFlagPress={() =>
+          setState(prev => ({ ...prev, showLevelSelection: true }))
+        }
       />
       <View styles={styles.board}>
         <MineField
